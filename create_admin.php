@@ -1,6 +1,14 @@
 <?php
 require_once 'config/database.php';
 
+try {
+    // Khởi tạo đối tượng Database và lấy kết nối
+    $database = new Database();
+    $conn = $database->getConnection();
+} catch(Exception $e) {
+    die("Lỗi kết nối database: " . $e->getMessage());
+}
+
 // Thông tin admin mặc định
 $email = 'admin@example.com';
 $password = 'admin123'; // Sẽ được hash
