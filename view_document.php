@@ -96,6 +96,31 @@ if (!$document) {
     exit();
 }
 
+// Tăng số lượt xem
+// Chỉ tăng lượt xem khi người dùng thực sự xem trang (không phải refresh) và không phải người đăng
+$should_increase_views = true;
+
+// Kiểm tra session để tránh tăng view khi refresh
+if (isset($_SESSION['last_viewed_' . $document_id])) {
+    $last_viewed = $_SESSION['last_viewed_' . $document_id];
+    if (time() - $last_viewed < 300) { // 5 phút
+        $should_increase_views = false;
+    }
+}
+
+// Không tăng view nếu người xem là người đăng
+if ($is_logged_in && $_SESSION['user_id'] == $document['user_id']) {
+    $should_increase_views = false;
+}
+
+if ($should_increase_views) {
+    $update_views = $conn->prepare("UPDATE documents SET views = views + 1 WHERE id = ?");
+    $update_views->execute([$document_id]);
+    $_SESSION['last_viewed_' . $document_id] = time();
+    // Cập nhật lại số lượt xem trong biến document
+    $document['views'] = ($document['views'] ?? 0) + 1;
+}
+
 // Include header sau khi xử lý logic
 require_once 'includes/header.php';
 
@@ -399,7 +424,7 @@ $like_count = $stmt->fetchColumn();
             <div class="document-stats">
                 <div class="stat-item">
                     <i class="fas fa-eye"></i>
-                    <span>2.5k lượt xem</span>
+                    <span><?php echo number_format($document['views']); ?> lượt xem</span>
                 </div>
                 <div class="stat-item">
                     <i class="fas fa-heart"></i>
