@@ -60,47 +60,6 @@ erDiagram
     CATEGORIES ||--o{ DOCUMENTS : contains
 ```
 
-### 📋 Chi tiết các bảng
-
-<details>
-<summary>1. Bảng users</summary>
-
-```sql
-CREATE TABLE users (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  email VARCHAR(255) UNIQUE,
-  password VARCHAR(255),
-  full_name VARCHAR(255),
-  role_id INT,
-  status ENUM('active','inactive','banned') DEFAULT 'active',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-```
-</details>
-
-<details>
-<summary>2. Bảng documents</summary>
-
-```sql
-CREATE TABLE documents (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  title VARCHAR(255),
-  description TEXT,
-  filename VARCHAR(255),
-  file_size BIGINT,
-  file_type VARCHAR(100),
-  user_id INT,
-  category_id INT,
-  visibility ENUM('public','private') DEFAULT 'public',
-  status ENUM('pending','approved','rejected') DEFAULT 'pending',
-  downloads INT DEFAULT 0,
-  views INT DEFAULT 0,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-</details>
-
 ## 🛠️ Yêu cầu hệ thống
 
 | Thành phần | Phiên bản tối thiểu |
@@ -113,10 +72,7 @@ CREATE TABLE documents (
 
 ## 📥 Cài đặt
 
-1. Clone repository
-```bash
-git clone https://github.com/your-username/document-management.git
-cd document-management
+
 ```
 
 2. Cài đặt dependencies

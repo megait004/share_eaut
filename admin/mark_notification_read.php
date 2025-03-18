@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notification_id'])) {
     $notif = $stmt->fetch();
 
     if ($notif && $notif['user_id'] == $_SESSION['user_id']) {
-        $notification->markAsRead($notification_id);
+        $notification->markAsRead($notification_id, $_SESSION['user_id']);
         echo json_encode(['success' => true]);
     } else {
         http_response_code(403);
